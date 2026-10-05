@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HN Radar</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg: #f6f7f9;
+            --card: #fff;
+            --ink: #16202a;
+            --mute: #5d6b7a;
+            --line: #dde2e8;
+            --acc: #0b6e8a;
+            --tag: #e3f1f5
+        }
+
+        @media(prefers-color-scheme:dark) {
+            :root {
+                --bg: #10151b;
+                --card: #18202a;
+                --ink: #e6ebf0;
+                --mute: #93a1b0;
+                --line: #27323e;
+                --acc: #4fb8d4;
+                --tag: #1c3340
+            }
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif
+        }
+
+        header {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 16px 8px
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            letter-spacing: -.02em
+        }
+
+        .sub {
+            color: var(--mute);
+            font-size: .85rem
+        }
+
+        nav {
+            max-width: 860px;
+            margin: 12px auto;
+            padding: 0 16px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap
+        }
+
+        nav button {
+            border: 1px solid var(--line);
+            background: var(--card);
+            color: var(--ink);
+            padding: 7px 14px;
+            border-radius: 99px;
+            font: inherit;
+            cursor: pointer
+        }
+
+        nav button[aria-pressed=true] {
+            background: var(--acc);
+            border-color: var(--acc);
+            color: #fff
+        }
+
+        nav button:focus-visible,
+        input:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--acc);
+            outline-offset: 2px
+        }
+
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 16px 48px
+        }
+
+        input {
+            width: 100%;
+            padding: 9px 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--ink);
+            font: inherit
+        }
+
+        .item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .item a.t {
+            color: var(--ink);
+            text-decoration: none;
+            font-weight: 600
+        }
+
+        .item a.t:hover {
+            color: var(--acc)
+        }
+
+        .meta {
+            color: var(--mute);
+            font-size: .82rem;
+            margin-top: 2px
+        }
+
+        .meta a {
+            color: var(--mute)
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--tag);
+            color: var(--acc);
+            border-radius: 4px;
+            padding: 0 6px;
+            margin: 4px 4px 0 0;
+            font-size: .78rem
+        }
+
+        .snip {
+            margin: 6px 0 0;
+            font-size: .9rem;
+            color: var(--mute)
+        }
+
+        .empty {
+            color: var(--mute);
+            padding: 24px 0
+        }
+
+        .chartbox {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 14px;
+            height: 380px
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>HN Radar</h1>
+        <div class="sub" id="upd">Loading…</div>
+    </header>
+    <nav id="tabs"></nav>
+    <main><input id="q" type="search" placeholder="Filter by keyword" aria-label="Filter">
+        <div id="view"></div>
+    </main>
+    <script>
+        const $ = s => document.querySelector(s);
+        const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        const safe = u => /^https?:\/\//.test(u) ? u : "#";
+        const ago = t => { const h = (Date.now() / 1000 - t) / 3600; return h < 1 ? "just now" : h < 24 ? Math.round(h) + "h ago" : Math.round(h / 24) + "d ago" };
+        const tags = a => (a || []).map(t => `<span class="tag">${esc(t)}</span>`).join("");
+        const TABS = {
+            news: { label: "News", row: s => `<div class="item"><a class="t" href="${safe(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a><div class="meta">${s.score} pts · <a href="${safe(s.hn)}" target="_blank" rel="noopener">${s.comments} comments</a> · ${ago(s.time)}</div>${tags(s.tags)}</div>` },
+            ideas: { label: "Ideas", row: s => `<div class="item"><a class="t" href="${safe(s.hn)}" target="_blank" rel="noopener">${esc(s.title)}</a><div class="meta">${esc(s.kind)} · idea score ${s.idea_score} · ${s.comments} comments</div>${s.snippet ? `<p class="snip">${esc(s.snippet)}</p>` : ""}${tags(s.pain)}</div>` },
+            leads: { label: "Leads", row: s => `<div class="item"><div class="snip" style="margin:0;color:var(--ink)">${esc(s.text)}</div><div class="meta">${s.emails.map(e => `<a href="mailto:${esc(e)}">${esc(e)}</a>`).join(" ")} ${s.links.map(l => `<a href="${safe(l)}" target="_blank" rel="noopener">link</a>`).join(" ")} <a href="${safe(s.hn)}" target="_blank" rel="noopener">source</a></div>${tags(s.keys)}</div>` },
+            jobs: { label: "Jobs", row: s => `<div class="item"><a class="t" href="${safe(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a><div class="meta">${ago(s.time)}</div>${s.snippet ? `<p class="snip">${esc(s.snippet)}</p>` : ""}</div>` },
+            trends: { label: "Trends" }
+        };
+        let D, T, cur = "news", chart;
+        function render() {
+            if (chart) { chart.destroy(); chart = null }
+            const v = $("#view"), q = $("#q").value.toLowerCase();
+            $("#q").style.display = cur === "trends" ? "none" : "block";
+            if (cur === "trends") {
+                const days = Object.keys(T);
+                v.innerHTML = `<div class="chartbox"><canvas id="c"></canvas></div><p class="sub">Title mentions across ~300 top, new and best stories per run. ${days.length < 2 ? "History starts today; the lines fill in as days pass." : days.length + " days tracked."}</p>`;
+                const terms = Object.keys(T[days.at(-1)]).filter(k => k !== "sample");
+                const hue = i => `hsl(${i * 37 % 360} 65% 50%)`;
+                chart = new Chart($("#c"), { type: "line", data: { labels: days, datasets: terms.map((k, i) => ({ label: k, data: days.map(d => T[d][k] ?? 0), borderColor: hue(i), backgroundColor: hue(i), tension: .25 })) }, options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: "mentions" } } } } });
+                return;
+            }
+            const rows = (D[cur] || []).filter(r => !q || JSON.stringify(r).toLowerCase().includes(q));
+            v.innerHTML = rows.length ? rows.map(TABS[cur].row).join("") : `<div class="empty">Nothing matches. Clear the filter or wait for the next update.</div>`;
+        }
+        function tabs() {
+            $("#tabs").innerHTML = Object.entries(TABS).map(([k, t]) => `<button data-k="${k}" aria-pressed="${k === cur}">${t.label}</button>`).join("");
+            document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { cur = b.dataset.k; tabs(); render() });
+        }
+        $("#q").oninput = render;
+        Promise.all([fetch("data.json").then(r => r.json()), fetch("trends.json").then(r => r.json())]).then(([d, t]) => {
+            D = d; T = t; $("#upd").textContent = "Updated " + new Date(d.updated).toLocaleString() + (d.thread ? " · " + d.thread : ""); tabs(); render();
+        }).catch(e => { $("#upd").textContent = "No data yet. Run fetch.py or the GitHub Action first." });
+    </script>
+</body>
+
+</html>
