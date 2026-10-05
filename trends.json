@@ -1,16 +1,16 @@
 {
  "2026-10-05": {
-  "sample": 243,
-  "ai": 28,
+  "sample": 240,
+  "ai": 24,
   "llm": 3,
   "agent": 5,
   "automation": 0,
   "n8n": 0,
-  "rust": 5,
-  "python": 5,
+  "rust": 9,
+  "python": 2,
   "saas": 0,
-  "openai": 4,
-  "claude": 6,
+  "openai": 6,
+  "claude": 2,
   "startup": 0
  }
 }
