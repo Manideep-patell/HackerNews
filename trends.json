@@ -42,17 +42,17 @@
   "startup": 0
  },
  "2026-10-08": {
-  "sample": 248,
-  "ai": 27,
-  "llm": 1,
-  "agent": 7,
+  "sample": 239,
+  "ai": 29,
+  "llm": 2,
+  "agent": 6,
   "automation": 0,
   "n8n": 0,
-  "rust": 5,
-  "python": 2,
+  "rust": 4,
+  "python": 1,
   "saas": 0,
-  "openai": 7,
-  "claude": 7,
+  "openai": 5,
+  "claude": 8,
   "startup": 0
  }
 }
