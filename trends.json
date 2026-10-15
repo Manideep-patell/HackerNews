@@ -140,17 +140,17 @@
   "startup": 2
  },
  "2026-10-15": {
-  "sample": 243,
-  "ai": 34,
+  "sample": 241,
+  "ai": 32,
   "llm": 3,
-  "agent": 4,
+  "agent": 5,
   "automation": 0,
   "n8n": 0,
-  "rust": 3,
+  "rust": 2,
   "python": 0,
   "saas": 0,
   "openai": 3,
-  "claude": 5,
+  "claude": 2,
   "startup": 1
  }
 }
