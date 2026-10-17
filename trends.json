@@ -168,16 +168,16 @@
   "startup": 0
  },
  "2026-10-17": {
-  "sample": 238,
-  "ai": 24,
+  "sample": 240,
+  "ai": 25,
   "llm": 3,
   "agent": 4,
   "automation": 1,
   "n8n": 0,
-  "rust": 0,
+  "rust": 2,
   "python": 0,
   "saas": 0,
-  "openai": 2,
+  "openai": 3,
   "claude": 3,
   "startup": 0
  }
