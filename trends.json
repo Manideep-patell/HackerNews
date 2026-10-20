@@ -211,16 +211,16 @@
  },
  "2026-10-20": {
   "sample": 245,
-  "ai": 18,
-  "llm": 4,
+  "ai": 24,
+  "llm": 7,
   "agent": 7,
   "automation": 0,
   "n8n": 0,
-  "rust": 4,
-  "python": 2,
+  "rust": 3,
+  "python": 0,
   "saas": 0,
   "openai": 1,
-  "claude": 5,
-  "startup": 0
+  "claude": 3,
+  "startup": 1
  }
 }
