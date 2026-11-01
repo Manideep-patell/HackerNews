@@ -379,16 +379,16 @@
  },
  "2026-11-01": {
   "sample": 242,
-  "ai": 27,
-  "llm": 0,
-  "agent": 7,
-  "automation": 1,
+  "ai": 25,
+  "llm": 2,
+  "agent": 5,
+  "automation": 0,
   "n8n": 0,
-  "rust": 2,
-  "python": 3,
-  "saas": 0,
-  "openai": 3,
-  "claude": 5,
+  "rust": 3,
+  "python": 1,
+  "saas": 2,
+  "openai": 1,
+  "claude": 7,
   "startup": 1
  }
 }
