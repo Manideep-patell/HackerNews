@@ -504,17 +504,17 @@
   "startup": 1
  },
  "2026-11-10": {
-  "sample": 233,
-  "ai": 27,
-  "llm": 1,
-  "agent": 7,
+  "sample": 237,
+  "ai": 26,
+  "llm": 3,
+  "agent": 4,
   "automation": 0,
   "n8n": 0,
-  "rust": 4,
-  "python": 0,
+  "rust": 2,
+  "python": 3,
   "saas": 0,
-  "openai": 0,
-  "claude": 9,
+  "openai": 1,
+  "claude": 7,
   "startup": 0
  }
 }
