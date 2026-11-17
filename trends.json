@@ -600,5 +600,19 @@
   "openai": 4,
   "claude": 5,
   "startup": 0
+ },
+ "2026-11-17": {
+  "sample": 241,
+  "ai": 20,
+  "llm": 2,
+  "agent": 4,
+  "automation": 0,
+  "n8n": 0,
+  "rust": 9,
+  "python": 1,
+  "saas": 0,
+  "openai": 2,
+  "claude": 4,
+  "startup": 0
  }
 }
