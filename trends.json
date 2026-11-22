@@ -672,13 +672,13 @@
   "startup": 1
  },
  "2026-11-22": {
-  "sample": 238,
-  "ai": 24,
-  "llm": 2,
-  "agent": 4,
+  "sample": 242,
+  "ai": 30,
+  "llm": 4,
+  "agent": 2,
   "automation": 0,
   "n8n": 0,
-  "rust": 4,
+  "rust": 6,
   "python": 2,
   "saas": 0,
   "openai": 0,
